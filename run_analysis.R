@@ -79,19 +79,19 @@ names(selected) <- gsub("\\d{1,3}_", "", names(selected))
 # 5. From the data set in step 4, creates a second, independent tidy data set 
 #    with the average of each variable for each activity and each subject.
 
-# Declare the Goal array with 3 dimensions of [row, column, subject number]
-# row = Activity Label
-# column = column with mean or std
-# subject number = 3rd dimension
+# Declare the Goal array with 3 dimensions of [1st, 2nd, 3rd]
+# 1st dimension = subject number
+# 2nd dimension = row of Activity Label
+# 3rd dimension = column name with mean or std
 
 lengthColumn <- length(names(selected)) - 2 # -2 means to subtract "Subject" and "Activity_label"
 SubjectTotal <- 30 # Total subjects = 30
 nameSelected <- names(selected)
 
-Goal <- array("", dim = c(lengthActLabels, lengthColumn, SubjectTotal))
+Goal <- array("", dim = c(SubjectTotal, lengthActLabels, lengthColumn))
 
 # Assign the names of dimension of Goal
-dimnames(Goal) = list(dataActLabels$V2, nameSelected[1:lengthColumn], 1:SubjectTotal)
+dimnames(Goal) = list(1:SubjectTotal, dataActLabels$V2, nameSelected[1:lengthColumn])
 
 # Main loop to get the answers for this "Course Project"
 # Get the average (i.e. mean) of each variable for each activity and each subject
@@ -111,7 +111,7 @@ for (iSub in 1:SubjectTotal){
                   SubjectAct <- rbind(SubjectAct, iAct)
             }
       }
-      Goal[, , iSub] <- SubjectAct
+      Goal[iSub, ,] <- SubjectAct
 }
 
 # Change the class of Goal values from character to numeric
